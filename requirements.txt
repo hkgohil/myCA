@@ -1,0 +1,13 @@
+streamlit==1.35.0
+langchain==0.2.5
+langchain-groq==0.1.6
+langchain-core>=0.2.19
+langgraph==0.1.9
+PyMuPDF==1.24.5
+pytesseract==0.3.10
+Pillow==10.3.0
+pandas==2.2.2
+reportlab==4.2.2
+faker==25.2.0
+python-dotenv==1.0.1
+pydantic==2.7.4
