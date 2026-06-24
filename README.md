@@ -1,213 +1,93 @@
 # 🧾 AI Tax Filing Assistant — India
-### Agentic AI Project | FY 2023-24 | Built with LangGraph + Groq + Streamlit
+### An Agentic AI System for Indian Taxpayers (FY 2023-24)
+
+An intelligent multi-agent system that acts like a personal Chartered Accountant (CA). Powered by **LangGraph**, **Groq (Llama 3)**, and **Streamlit**.
 
 ---
 
-## 🎯 What It Does
+## 🎯 Features
 
-An intelligent multi-agent system that acts like a personal CA (Chartered Accountant):
-- 📄 **Reads** your Form 16, Bank Statements, Salary Slips (PDF)
-- 🤖 **4 AI Agents** process your data in a pipeline
-- 💰 **Calculates tax** under both Old and New Regime
-- 🔍 **Finds missed deductions** you didn't know about
-- 🗣️ **Explains everything** in plain Hindi or English
-- 📥 **Downloads** a professional PDF tax report
+- 📄 **Automated Document Parsing**: Reads Form 16, Bank Statements, and Salary Slips (PDFs).
+- 🤖 **Multi-Agent Pipeline**: 4 specialized AI Agents process financial data sequentially.
+- 💰 **Smart Tax Calculation**: Computes tax under both Old and New Regimes to find the best savings.
+- 🔍 **Deduction Discovery**: Proactively identifies missed deductions using LLMs.
+- 🗣️ **Multilingual Explanations**: Explains tax breakdowns in plain English or Hindi.
+- 📥 **Professional Reports**: Generates downloadable PDF tax reports.
 
 ---
 
 ## 🏗️ Architecture
 
-```
+```text
 User Uploads PDFs
-        ↓
-  Document Parser (PyMuPDF + Regex)
-        ↓
-  ┌─────────────────────────────────────────┐
-  │         LangGraph Pipeline              │
-  │                                         │
-  │  Agent 1: Income Aggregator             │
-  │      → Reads all docs, sums income      │
-  │           ↓                             │
-  │  Agent 2: Deduction Finder              │
-  │      → Finds deductions + LLM spots     │
-  │        what's missing                   │
-  │           ↓                             │
-  │  Agent 3: Tax Calculator                │
-  │      → Computes Old & New regime tax    │
-  │           ↓                             │
-  │  Agent 4: Explainer                     │
-  │      → LLM explains in Hindi/English    │
-  └─────────────────────────────────────────┘
-        ↓
-  Streamlit Dashboard + PDF Report
-```
-
----
-
-## 🚀 Quick Setup (15 minutes)
-
-### Step 1: Clone & Setup
-
-```bash
-# Navigate to project folder
-cd tax_assistant
-
-# Create virtual environment
-python -m venv venv
-
-# Activate it
-# Windows:
-venv\Scripts\activate
-# Mac/Linux:
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### Step 2: Get FREE Groq API Key
-
-1. Go to **https://console.groq.com** (completely free)
-2. Sign up → Create API Key
-3. Copy the key
-
-### Step 3: Configure API Key
-
-```bash
-# Copy the example env file
-cp .env.example .env
-
-# Open .env and paste your key:
-GROQ_API_KEY=gsk_your_key_here
-```
-
-### Step 4: Generate Sample Documents (for testing)
-
-```bash
-python utils/sample_generator.py
-```
-
-This creates 3 realistic dummy PDFs in `data/samples/`:
-- `salary_slip_march_2024.pdf`
-- `form16_2023_24.pdf`  
-- `bank_statement_hdfc.pdf`
-
-### Step 5: Run the App
-
-```bash
-streamlit run app.py
-```
-
-Open **http://localhost:8501** in your browser 🎉
-
----
-
-## 📁 Project Structure
-
-```
-tax_assistant/
-│
-├── app.py                    # Main Streamlit UI
-├── requirements.txt          # All dependencies
-├── .env.example              # API key template
-├── .env                      # Your actual API key (don't commit!)
-│
-├── agents/
-│   ├── __init__.py
-│   └── tax_pipeline.py       # LangGraph multi-agent pipeline
-│
-├── utils/
-│   ├── __init__.py
-│   ├── tax_calculator.py     # Indian tax slab logic (pure Python)
-│   ├── document_parser.py    # PDF parsing (PyMuPDF + regex)
-│   ├── sample_generator.py   # Generate dummy test PDFs
-│   └── report_generator.py   # Generate PDF tax report
-│
-├── data/
-│   └── samples/              # Generated test documents go here
-│
-└── output/                   # Generated tax reports go here
+      ↓
+Document Parser (PyMuPDF + Regex)
+      ↓
+┌─────────────────────────────────────────────┐
+│             LangGraph Pipeline              │
+│                                             │
+│ 1. Income Aggregator: Sums all income       │
+│                      ↓                      │
+│ 2. Deduction Finder: LLM spots missing deds │
+│                      ↓                      │
+│ 3. Tax Calculator: Computes tax regimes     │
+│                      ↓                      │
+│ 4. Explainer: Translates logic to user      │
+└─────────────────────────────────────────────┘
+      ↓
+Streamlit Dashboard + PDF Report
 ```
 
 ---
 
 ## 🔧 Tech Stack
 
-| Component | Technology | Why |
-|-----------|-----------|-----|
-| Agent Framework | **LangGraph** | Multi-agent orchestration with state |
-| LLM | **Groq (Llama 3)** | Free, fast, accurate |
-| PDF Parsing | **PyMuPDF** | Best PDF text extraction |
-| Tax Logic | **Pure Python** | Indian slab calculations |
-| UI | **Streamlit** | Fast to build, looks great |
-| PDF Reports | **ReportLab** | Professional PDF generation |
-| Fake Data | **Faker + ReportLab** | Realistic test documents |
+| Component | Technology | Description |
+|-----------|-----------|-------------|
+| **Agent Framework** | LangGraph | Multi-agent orchestration with state management |
+| **LLM** | Groq (Llama 3) | Fast, accurate, and cost-effective inference |
+| **PDF Extraction** | PyMuPDF | Robust document text extraction |
+| **Tax Logic** | Python | Standardized Indian tax slab calculations |
+| **Frontend UI** | Streamlit | Responsive and interactive dashboard |
+| **PDF Generation** | ReportLab | High-quality downloadable tax reports |
 
 ---
 
-## 🧮 Tax Logic Covered
+## 🚀 Quick Setup
 
-### New Regime Slabs (FY 2024-25)
-- 0% up to ₹3L | 5% (₹3-7L) | 10% (₹7-10L) | 15% (₹10-12L) | 20% (₹12-15L) | 30% above ₹15L
-- Standard Deduction: ₹75,000
-- Rebate 87A: No tax if income ≤ ₹7L
+1. **Clone & Install Dependencies:**
+   ```bash
+   git clone https://github.com/hkgohil/myCA.git
+   cd myCA
+   python -m venv venv
+   venv\Scripts\activate  # Use source venv/bin/activate on Mac/Linux
+   pip install -r requirements.txt
+   ```
 
-### Old Regime Slabs
-- 0% up to ₹2.5L | 5% (₹2.5-5L) | 20% (₹5-10L) | 30% above ₹10L
-- Standard Deduction: ₹50,000
-- Rebate 87A: No tax if income ≤ ₹5L
+2. **Configure API Keys:**
+   Create a `.env` file in the root directory and add your free Groq API key:
+   ```env
+   GROQ_API_KEY=your_groq_api_key_here
+   ```
 
-### Deductions Detected
-- **80C** — PF, LIC, PPF, ELSS, NSC, Home Loan (Max ₹1.5L)
-- **80D** — Health Insurance (₹25K self + ₹25K parents)
-- **HRA** — Formula: min(HRA received, 50/40% of basic, rent-10% of basic)
-- **80TTA** — Savings Interest (Max ₹10K)
-- **80E** — Education Loan Interest (No limit)
-- **80CCD(1B)** — NPS (Max ₹50K)
-- **80G** — Donations
-
----
-
-## 🎤 How to Demo to Interviewer
-
-1. **Open the app** → show the clean UI
-2. **Click "Generate Test Documents"** in sidebar → 3 PDFs created
-3. **Upload all 3 PDFs** → click Analyze
-4. **Show the pipeline** — 4 agents running sequentially
-5. **Point out** Old vs New regime comparison + missed deductions
-6. **Switch to Hindi** → show explanation in Hindi
-7. **Download PDF report** → show the professional output
-
-**Key talking points:**
-- "I used LangGraph to orchestrate 4 specialized agents in a DAG pipeline"
-- "The deduction finder agent uses LLM to proactively identify what the user missed"
-- "This solves a real India-specific problem — CAs charge ₹5,000+ for this"
-- "Groq's free tier makes this completely cost-free to run"
+3. **Run the Application:**
+   ```bash
+   streamlit run app.py
+   ```
 
 ---
 
-## 🔜 Future Improvements (tell the interviewer!)
+## 🔜 Future Roadmap
 
-- [ ] OCR for scanned/image PDFs using Tesseract
-- [ ] Vector DB (ChromaDB) to store user's past returns
-- [ ] ITR form auto-fill export
-- [ ] WhatsApp bot interface (huge India market)
-- [ ] Multi-year comparison (FY 2022-23 vs 2023-24)
-- [ ] Support for freelancer income (44ADA presumptive taxation)
-- [ ] Capital gains calculation (stocks, mutual funds)
+- [ ] OCR support for scanned/image PDFs using Tesseract.
+- [ ] Vector Database (ChromaDB) to store and compare past returns.
+- [ ] Auto-fill export for official ITR forms.
+- [ ] Support for freelancer income (44ADA presumptive taxation).
+- [ ] Capital gains calculation integration (Stocks, Mutual Funds).
 
 ---
 
-## ⚠️ Disclaimer
-
-This tool is for educational and portfolio purposes only.  
-Always consult a qualified CA before filing your ITR.  
-Tax laws change — verify with official Income Tax India website.
-
----
-
-## 👨‍💻 Built with ❤️ for India
-
-*Solving real problems for 70 crore taxpayers*
-# myCA
-
+<p align="center">
+  <i>Disclaimer: This tool is for educational and portfolio purposes only. Always consult a qualified CA before filing your ITR.</i><br>
+  <b>Built with ❤️ for India</b>
+</p>
